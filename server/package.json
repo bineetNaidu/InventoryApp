@@ -1,0 +1,31 @@
+{
+  "name": "inventory-app-server",
+  "version": "0.0.1",
+  "description": "A Nodejs Server for Home Inventory App with Postgresql.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/index.ts"
+  },
+  "keywords": [
+    "typescript",
+    "nodejs",
+    "node",
+    "postgresql",
+    "restapi"
+  ],
+  "author": "BineetNaidu <bineet.s.naidu@gmail.com> (https://bineetnaidu.github.io/)",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^2.0.7",
+    "ts-node": "^9.1.1"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "helmet": "^4.5.0",
+    "morgan": "^1.10.0",
+    "typeorm": "^0.2.32"
+  }
+}
