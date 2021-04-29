@@ -2,32 +2,51 @@ import express from 'express';
 import logger from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
+import { Connection, createConnection } from 'typeorm';
+import dotenv from 'dotenv';
 import 'express-async-errors';
+
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config();
+}
 
 // ***** Routers Routes ******
 import { v1Routes } from './routers/v1';
 
 //  ****** Constants *******
-const app = express();
-const PORT = process.env.PORT || 4242;
+(async () => {
+  const app = express();
+  const PORT = process.env.PORT || 4242;
 
-// ***** Middlewares *****
-app.use(express.json());
-app.use(logger('dev'));
-app.use(cors());
+  const connection: Connection = await createConnection({
+    type: 'postgres',
+    host: process.env.DB_HOST,
+    port: 5432,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    database: 'inventory_app',
+    entities: ['models/*.model.ts'],
+  });
 
-app.get('/', (req, res) => {
-  res.json({ msg: 'hello bineet' });
-});
+  // ***** Middlewares *****
+  app.use(express.json());
+  app.use(logger('dev'));
+  app.use(cors());
 
-app.use('/api', v1Routes);
+  app.get('/', (req, res) => {
+    res.json({ msg: 'hello bineet' });
+  });
 
-// **** Listeners ****
-app.listen(PORT, () => {
-  console.log('-----------------------------------------');
-  console.log('>>> INVENTORY API SERVER HAS STARTED <<<');
-  console.log('-----------------------------------------');
-  if (process.env.NODE_ENV !== 'production') {
-    console.log('>> visit: http://localhost:' + PORT);
-  }
-});
+  app.use('/api', v1Routes);
+
+  // **** Listeners ****
+  app.listen(PORT, () => {
+    console.log('-----------------------------------------');
+    console.log('>>> INVENTORY API SERVER HAS STARTED <<<');
+    connection.isConnected ?? console.log('>>> DB is Connected <<<');
+    console.log('-----------------------------------------');
+    if (process.env.NODE_ENV !== 'production') {
+      console.log('>> visit: http://localhost:' + PORT);
+    }
+  });
+})();
