@@ -43,7 +43,7 @@ import { v1Routes } from './routers/v1';
   app.listen(PORT, () => {
     console.log('-----------------------------------------');
     console.log('>>> INVENTORY API SERVER HAS STARTED <<<');
-    connection.isConnected ?? console.log('>>> DB is Connected <<<');
+    connection.isConnected && console.log('>>> DB is Connected <<<');
     console.log('-----------------------------------------');
     if (process.env.NODE_ENV !== 'production') {
       console.log('>> visit: http://localhost:' + PORT);
