@@ -12,6 +12,13 @@ if (process.env.NODE_ENV !== 'production') {
   dotenv.config();
 }
 
+// ** Models **
+import { User } from './models/User.model';
+import { Comment } from './models/Comment.model';
+import { Item } from './models/Items.model';
+import { ItemType } from './models/ItemTypes.model';
+import { Manufacturer } from './models/Manufacturer.model';
+
 // ***** Routers Routes ******
 import { v1Routes } from './routers/v1';
 
@@ -27,7 +34,7 @@ import { v1Routes } from './routers/v1';
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: 'inventory_app',
-    entities: ['models/*.model.ts'],
+    entities: [User, Comment, Item, ItemType, Manufacturer],
   });
 
   // ***** Middlewares *****
