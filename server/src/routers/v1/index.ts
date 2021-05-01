@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { createUser } from './users/create';
 import { findAllUsers } from './users/findAll';
 import { findOneUser } from './users/findOne';
-import { createManufacturer } from './brands/create';
+import { createManufacturer } from './manufacturer/create';
 
 const r = Router();
 
