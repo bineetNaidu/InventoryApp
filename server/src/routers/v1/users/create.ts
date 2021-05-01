@@ -13,18 +13,18 @@ export const signup = async (req: Request, res: Response) => {
     date_of_birth,
   } = req.body;
 
-  const user = getRepository(UserModel).create({
-    username,
-    email,
-    password,
-    country,
-    state,
-    inventory_location,
-    date_of_birth,
-    is_admin: false,
-  });
-
-  await user.save();
+  const user = await getRepository(UserModel)
+    .create({
+      username,
+      email,
+      password,
+      country,
+      state,
+      inventory_location,
+      date_of_birth,
+      is_admin: false,
+    })
+    .save();
 
   res.json({
     user,

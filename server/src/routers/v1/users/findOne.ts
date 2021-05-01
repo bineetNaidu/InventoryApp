@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { getRepository } from 'typeorm';
+import * as bcrypt from 'bcryptjs';
 import { User as UserModel } from '../../../models/User.model';
 
 const r = Router();
@@ -8,7 +9,7 @@ r.post('/find', async (req, res) => {
   const { username, password } = req.body;
 
   const user = await getRepository(UserModel).findOne({
-    where: { username, password },
+    where: { username },
     select: [
       'id',
       'username',
@@ -19,6 +20,16 @@ r.post('/find', async (req, res) => {
       'state',
     ],
   });
+
+  if (!user) {
+    throw new Error('User Not Found with the given Email Address!');
+  }
+
+  const valid = await bcrypt.compare(password, user.password);
+
+  if (!valid) {
+    throw new Error('Incorrect Password!');
+  }
 
   res.json({
     user,
