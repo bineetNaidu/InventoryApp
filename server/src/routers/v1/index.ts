@@ -5,6 +5,7 @@ import { findOneUser } from './users/findOne';
 import { createManufacturer } from './manufacturer/create';
 import { findAllManufacturer } from './manufacturer/findAll';
 import { findOneManufacturer } from './manufacturer/findOne';
+import { deleteOneManufacturer } from './manufacturer/delete';
 
 const r = Router();
 
@@ -14,9 +15,10 @@ r.use('/v1/users', findOneUser);
 r.get('/v1/users', findAllUsers);
 
 // *** Brands / Manufacturer Route ***
-r.route('/v1/manufacturer').post(createManufacturer);
-r.get('/v1/manufacturer/all', findAllManufacturer);
-r.get('/v1/manufacturer/:id', findOneManufacturer);
+r.route('/v1/manufacturer').post(createManufacturer).get(findAllManufacturer);
+r.route('/v1/manufacturer/:id')
+  .delete(deleteOneManufacturer)
+  .get(findOneManufacturer);
 
 r.use('/v1/comments', (req, res) => {});
 r.use('/v1/items', (req, res) => {});
