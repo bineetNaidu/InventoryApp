@@ -4,6 +4,8 @@ import helmet from 'helmet';
 import cors from 'cors';
 import { Connection, createConnection } from 'typeorm';
 import dotenv from 'dotenv';
+import NotFoundError from './utils/NotFoundError';
+import ExpressErrorHandler from './utils/ExpressErrorHandler';
 import 'express-async-errors';
 
 if (process.env.NODE_ENV !== 'production') {
@@ -38,6 +40,13 @@ import { v1Routes } from './routers/v1';
   });
 
   app.use('/api', v1Routes);
+
+  //! Not found page error
+  app.all('*', () => {
+    throw new NotFoundError();
+  });
+  // ! Error Handlers
+  app.use(ExpressErrorHandler);
 
   // **** Listeners ****
   app.listen(PORT, () => {
