@@ -6,6 +6,7 @@ import { createManufacturer } from './manufacturer/create';
 import { findAllManufacturer } from './manufacturer/findAll';
 import { findOneManufacturer } from './manufacturer/findOne';
 import { deleteOneManufacturer } from './manufacturer/delete';
+import { updateOneManufacturer } from './manufacturer/update';
 
 const r = Router();
 
@@ -18,7 +19,8 @@ r.get('/v1/users', findAllUsers);
 r.route('/v1/manufacturer').post(createManufacturer).get(findAllManufacturer);
 r.route('/v1/manufacturer/:id')
   .delete(deleteOneManufacturer)
-  .get(findOneManufacturer);
+  .get(findOneManufacturer)
+  .put(updateOneManufacturer);
 
 r.use('/v1/comments', (req, res) => {});
 r.use('/v1/items', (req, res) => {});
