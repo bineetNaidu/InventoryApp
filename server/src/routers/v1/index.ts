@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createUser } from './users/create';
+import { signup } from './users/create';
 import { findAllUsers } from './users/findAll';
 import { findOneUser } from './users/findOne';
 import { createManufacturer } from './manufacturer/create';
@@ -11,9 +11,8 @@ import { updateOneManufacturer } from './manufacturer/update';
 const r = Router();
 
 // *** Users Route ***
-r.use('/v1/users', createUser);
+r.route('/v1/users').post(signup).get(findAllUsers);
 r.use('/v1/users', findOneUser);
-r.get('/v1/users', findAllUsers);
 
 // *** Brands / Manufacturer Route ***
 r.route('/v1/manufacturer').post(createManufacturer).get(findAllManufacturer);
@@ -24,6 +23,5 @@ r.route('/v1/manufacturer/:id')
 
 r.use('/v1/comments', (req, res) => {});
 r.use('/v1/items', (req, res) => {});
-r.use('/v1/item_type', (req, res) => {});
 
 export { r as v1Routes };

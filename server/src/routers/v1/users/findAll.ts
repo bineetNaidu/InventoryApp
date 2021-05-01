@@ -6,7 +6,7 @@ export const findAllUsers = async (req: Request, res: Response) => {
   const user = await getRepository(UserModel).find({
     select: ['id', 'username', 'country', 'date_of_birth', 'state'],
     order: {
-      id: 'DESC',
+      id: 'ASC',
     },
   });
 

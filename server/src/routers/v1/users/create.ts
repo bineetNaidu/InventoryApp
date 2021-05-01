@@ -1,10 +1,8 @@
-import { Router } from 'express';
+import { Response, Request } from 'express';
 import { getRepository } from 'typeorm';
 import { User as UserModel } from '../../../models/User.model';
 
-const r = Router();
-
-r.post('/create', async (req, res) => {
+export const signup = async (req: Request, res: Response) => {
   const {
     username,
     email,
@@ -34,6 +32,4 @@ r.post('/create', async (req, res) => {
     status: req.statusCode,
     message: req.statusMessage,
   });
-});
-
-export { r as createUser };
+};
