@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { createUser } from './users/create';
 import { findAllUsers } from './users/findAll';
 import { findOneUser } from './users/findOne';
+import { createManufacturer } from './brands/create';
 
 const r = Router();
 
@@ -10,7 +11,8 @@ r.use('/v1/users', createUser);
 r.use('/v1/users', findOneUser);
 r.get('/v1/users', findAllUsers);
 
-r.use('/v1/brands', (req, res) => {});
+// *** Brands / Manufacturer Route ***
+r.route('/v1/manufacturer').post(createManufacturer);
 r.use('/v1/comments', (req, res) => {});
 r.use('/v1/items', (req, res) => {});
 r.use('/v1/item_type', (req, res) => {});
