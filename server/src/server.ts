@@ -16,7 +16,6 @@ if (process.env.NODE_ENV !== 'production') {
 import { User } from './models/User.model';
 import { Comment } from './models/Comment.model';
 import { Item } from './models/Items.model';
-import { ItemType } from './models/ItemTypes.model';
 import { Manufacturer } from './models/Manufacturer.model';
 
 // ***** Routers Routes ******
@@ -34,7 +33,7 @@ import { v1Routes } from './routers/v1';
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: 'inventory_app',
-    entities: [User, Comment, Item, ItemType, Manufacturer],
+    entities: [User, Comment, Item, Manufacturer],
   });
 
   // ***** Middlewares *****

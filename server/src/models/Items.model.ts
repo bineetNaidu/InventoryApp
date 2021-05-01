@@ -1,5 +1,10 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
 
+enum ItemType {
+  Inventory = 'inventory',
+  NonInventory = 'non-inventory',
+  Service = 'service',
+}
 @Entity('items')
 export class Item extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -18,8 +23,10 @@ export class Item extends BaseEntity {
 
   @Column('varchar', { length: 200 }) info?: string;
 
+  @Column({ type: 'enum', enum: ItemType, default: ItemType.NonInventory })
+  item_type!: string;
+
   // ? one-to-on relations
   @Column('uuid') user_id!: string;
   @Column('uuid') manufacturer_id!: string;
-  @Column('uuid') item_type_id!: string;
 }
