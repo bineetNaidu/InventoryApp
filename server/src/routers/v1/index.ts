@@ -10,6 +10,8 @@ import { updateOneManufacturer } from './manufacturer/update';
 import { isAuthed } from '../../middlewares/isAuthed';
 import { isAdmin } from '../../middlewares/isAdmin';
 import { createItem } from './items/create';
+import { findAllItems } from './items/findAll';
+import { findItem } from './items/findOne';
 
 const r = Router();
 
@@ -21,12 +23,16 @@ r.use('/v1/users', findOneUser);
 r.route('/v1/manufacturer')
   .post(isAuthed, isAdmin, createManufacturer)
   .get(isAuthed, findAllManufacturer);
+
 r.route('/v1/manufacturer/:id')
   .delete(isAuthed, isAdmin, deleteOneManufacturer)
   .get(isAuthed, findOneManufacturer)
   .put(isAuthed, isAdmin, updateOneManufacturer);
 
-r.route('/v1/items').post(isAuthed, createItem);
+r.route('/v1/items')
+  .post(isAuthed, createItem)
+  .get(isAuthed, isAdmin, findAllItems);
+r.route('/v1/items/:id').get(isAuthed, findItem).put().delete();
 
 r.use('/v1/comments', (req, res) => {});
 
