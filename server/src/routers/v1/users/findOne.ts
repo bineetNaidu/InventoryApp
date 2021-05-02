@@ -31,7 +31,7 @@ r.post('/find', async (req, res) => {
   if (!valid) {
     throw new Error('Incorrect Password!');
   }
-  const token = await createJWT(user.id, user.email);
+  const token = await createJWT(user.id, user.email, user.is_admin || false);
 
   res.json({
     user,

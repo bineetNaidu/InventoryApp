@@ -27,7 +27,7 @@ export const signup = async (req: Request, res: Response) => {
     })
     .save();
 
-  const token = await createJWT(user.id, user.email);
+  const token = await createJWT(user.id, user.email, user.is_admin || false);
 
   res.json({
     user,
