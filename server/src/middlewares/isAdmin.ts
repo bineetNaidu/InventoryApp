@@ -1,10 +1,14 @@
 import { NextFunction, Request, Response } from 'express';
 import { decodeJWT } from '../utils/jwtUtils';
 
-export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
+export const isAdmin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const token = req.headers.authorization!.split(' ')[1];
-    const decode = decodeJWT(token);
+    const decode = await decodeJWT(token);
 
     // @ts-ignore
     if (decode && decode.is_admin) {
