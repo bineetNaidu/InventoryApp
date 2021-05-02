@@ -16,6 +16,7 @@ import { isItemsOwner } from '../../middlewares/isOwner';
 import { updateItem } from './items/update';
 import { deleteItem } from './items/delete';
 import { createComment } from './comments/create';
+import { deleteComment } from './comments/delete';
 
 const r = Router();
 
@@ -41,6 +42,8 @@ r.route('/v1/items/:id')
   .put(isAuthed, isItemsOwner, updateItem)
   .delete(isAuthed, isItemsOwner, deleteItem);
 
-r.post('/v1/comments/:item_id', isAuthed, createComment);
+r.route('/v1/comments/:item_id')
+  .post(isAuthed, createComment)
+  .delete(isAuthed, deleteComment);
 
 export { r as v1Routes };
