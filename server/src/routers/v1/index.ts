@@ -9,6 +9,7 @@ import { deleteOneManufacturer } from './manufacturer/delete';
 import { updateOneManufacturer } from './manufacturer/update';
 import { isAuthed } from '../../middlewares/isAuthed';
 import { isAdmin } from '../../middlewares/isAdmin';
+import { createItem } from './items/create';
 
 const r = Router();
 
@@ -25,7 +26,8 @@ r.route('/v1/manufacturer/:id')
   .get(isAuthed, findOneManufacturer)
   .put(isAuthed, isAdmin, updateOneManufacturer);
 
+r.route('/v1/items').post(isAuthed, createItem);
+
 r.use('/v1/comments', (req, res) => {});
-r.use('/v1/items', (req, res) => {});
 
 export { r as v1Routes };
