@@ -30,7 +30,7 @@ CREATE TABLE items (
  has_warranty BOOLEAN NOT NULL,
  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
  manufacturer_id INTEGER NOT NULL REFERENCES manufacturers(id),
- item_type_id item_type_enum NOT NULL
+ item_type item_type_enum NOT NULL
 );
 -- Create a table called 'comments'
 CREATE TABLE comments (
