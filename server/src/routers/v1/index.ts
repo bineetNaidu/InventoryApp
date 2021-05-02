@@ -8,6 +8,7 @@ import { findOneManufacturer } from './manufacturer/findOne';
 import { deleteOneManufacturer } from './manufacturer/delete';
 import { updateOneManufacturer } from './manufacturer/update';
 import { isAuthed } from '../../middlewares/isAuthed';
+import { isAdmin } from '../../middlewares/isAdmin';
 
 const r = Router();
 
@@ -17,12 +18,12 @@ r.use('/v1/users', findOneUser);
 
 // *** Brands / Manufacturer Route ***
 r.route('/v1/manufacturer')
-  .post(isAuthed, createManufacturer)
+  .post(isAuthed, isAdmin, createManufacturer)
   .get(isAuthed, findAllManufacturer);
 r.route('/v1/manufacturer/:id')
-  .delete(isAuthed, deleteOneManufacturer)
+  .delete(isAuthed, isAdmin, deleteOneManufacturer)
   .get(isAuthed, findOneManufacturer)
-  .put(isAuthed, updateOneManufacturer);
+  .put(isAuthed, isAdmin, updateOneManufacturer);
 
 r.use('/v1/comments', (req, res) => {});
 r.use('/v1/items', (req, res) => {});
