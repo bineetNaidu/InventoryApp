@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { getRepository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { User as UserModel } from '../../../models/User.model';
+import { createJWT } from '../../../utils/jwtUtils';
 
 const r = Router();
 
@@ -30,9 +31,11 @@ r.post('/find', async (req, res) => {
   if (!valid) {
     throw new Error('Incorrect Password!');
   }
+  const token = await createJWT(user.id, user.email);
 
   res.json({
     user,
+    token,
     success: true,
     status: req.statusCode || 200,
     message: req.statusMessage || 'OK',
