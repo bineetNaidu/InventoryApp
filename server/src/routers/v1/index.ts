@@ -13,6 +13,7 @@ import { createItem } from './items/create';
 import { findAllItems } from './items/findAll';
 import { findItem } from './items/findOne';
 import { isItemsOwner } from '../../middlewares/isOwner';
+import { updateItem } from './items/update';
 
 const r = Router();
 
@@ -33,7 +34,10 @@ r.route('/v1/manufacturer/:id')
 r.route('/v1/items')
   .post(isAuthed, createItem)
   .get(isAuthed, isAdmin, findAllItems);
-r.route('/v1/items/:id').get(isAuthed, isItemsOwner, findItem).put().delete();
+r.route('/v1/items/:id')
+  .get(isAuthed, isItemsOwner, findItem)
+  .put(isAuthed, isItemsOwner, updateItem)
+  .delete();
 
 r.use('/v1/comments', (req, res) => {});
 
