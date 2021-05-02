@@ -13,14 +13,9 @@ export const updateItem = async (req: Request, res: Response) => {
     item_type,
   } = req.body;
 
-  const item = await getRepository(ItemModel).find({
-    where: { id: item_id },
-    order: {
-      id: 'ASC',
-    },
-  });
+  const item = await getRepository(ItemModel).findOne(item_id);
 
-  if (!item.length) {
+  if (!item) {
     throw new Error('The Item with the given ID was Not Found');
   }
 
@@ -28,12 +23,12 @@ export const updateItem = async (req: Request, res: Response) => {
     .createQueryBuilder()
     .update(ItemModel)
     .set({ name, price, has_warranty, purchase_location, info, item_type })
-    .where('id = :id', { id: item[0].id })
+    .where('id = :id', { id: item.id })
     .execute();
 
   res.json({
-    item: item[0], // ! FIX THIS! (it show backdated data)
-    updated_item_id: item[0].id,
+    item, // ! FIX THIS! (it show backdated data)
+    updated_item_id: item.id,
     updated: true,
     success: true,
   });

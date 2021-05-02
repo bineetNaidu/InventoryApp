@@ -5,14 +5,11 @@ import { Manufacturer } from '../../../models/Manufacturer.model';
 export const deleteOneManufacturer = async (req: Request, res: Response) => {
   const manufacturer_id = req.params.id;
 
-  const manufacturer = await getRepository(Manufacturer).find({
-    where: { id: manufacturer_id },
-    order: {
-      id: 'ASC',
-    },
-  });
+  const manufacturer = await getRepository(Manufacturer).findOne(
+    manufacturer_id
+  );
 
-  if (!manufacturer.length) {
+  if (!manufacturer) {
     throw new Error('The Brand with the given ID was Not Found');
   }
 
@@ -20,12 +17,12 @@ export const deleteOneManufacturer = async (req: Request, res: Response) => {
     .createQueryBuilder()
     .delete()
     .from(Manufacturer)
-    .where('id = :id', { id: manufacturer[0].id })
+    .where('id = :id', { id: manufacturer.id })
     .execute();
 
   res.json({
-    manufacturer: manufacturer[0],
-    deleted_manufacturer_id: manufacturer[0].id,
+    manufacturer,
+    deleted_manufacturer_id: manufacturer.id,
     deleted: true,
     success: true,
   });
