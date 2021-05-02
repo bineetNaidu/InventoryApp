@@ -8,24 +8,14 @@ const r = Router();
 
 r.post('/find', async (req, res) => {
   const { username, password } = req.body;
+  console.log('1');
 
   const user = await getRepository(UserModel).findOne({
     where: { username },
-    select: [
-      'id',
-      'username',
-      'email',
-      'country',
-      'date_of_birth',
-      'inventory_location',
-      'state',
-    ],
   });
-
   if (!user) {
-    throw new Error('User Not Found with the given Email Address!');
+    throw new Error('User Not Found with the given username!');
   }
-
   const valid = await bcrypt.compare(password, user.password);
 
   if (!valid) {
@@ -34,7 +24,7 @@ r.post('/find', async (req, res) => {
   const token = await createJWT(user.id, user.email, user.is_admin || false);
 
   res.json({
-    user,
+    user, // ! REMOVE USER's PASSWORD IN API RESPONSNS!
     token,
     success: true,
     status: req.statusCode || 200,
@@ -43,3 +33,12 @@ r.post('/find', async (req, res) => {
 });
 
 export { r as findOneUser };
+// {
+//     "username": "user3",
+//     "password": "password",
+//     "country": "Sweden",
+//     "date_of_birth": "12-11-2011",
+//     "state": "",
+//     "email": "user3@gmail.com",
+//     "inventory_location": "home"
+// }
