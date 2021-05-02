@@ -36,7 +36,7 @@ CREATE TABLE items (
 CREATE TABLE comments (
  id SERIAL PRIMARY KEY NOT NULL,
  comment VARCHAR(80) NOT NULL,
- date_of_birth DATE NOT NULL,
+ commented_at DATE NOT NULL,
  item_id INTEGER NOT NULL REFERENCES items(id) ON DELETE CASCADE,
  author_id INTEGER NOT NULL REFERENCES users(id)
 );
