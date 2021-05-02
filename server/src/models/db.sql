@@ -38,7 +38,7 @@ CREATE TABLE comments (
  comment VARCHAR(80) NOT NULL,
  commented_at DATE NOT NULL,
  item_id INTEGER NOT NULL REFERENCES items(id) ON DELETE CASCADE,
- author_id INTEGER NOT NULL REFERENCES users(id)
+ author_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE
 );
 -- DROPS
 DROP TABLE users;
