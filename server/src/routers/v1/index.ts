@@ -15,6 +15,7 @@ import { findItem } from './items/findOne';
 import { isItemsOwner } from '../../middlewares/isOwner';
 import { updateItem } from './items/update';
 import { deleteItem } from './items/delete';
+import { createComment } from './comments/create';
 
 const r = Router();
 
@@ -40,6 +41,6 @@ r.route('/v1/items/:id')
   .put(isAuthed, isItemsOwner, updateItem)
   .delete(isAuthed, isItemsOwner, deleteItem);
 
-r.use('/v1/comments', (req, res) => {});
+r.post('/v1/comments/:item_id', isAuthed, createComment);
 
 export { r as v1Routes };
