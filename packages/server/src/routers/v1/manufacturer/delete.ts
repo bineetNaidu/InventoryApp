@@ -1,24 +1,16 @@
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
 import { Manufacturer } from '../../../models/Manufacturer.model';
 
 export const deleteOneManufacturer = async (req: Request, res: Response) => {
   const manufacturer_id = req.params.id;
 
-  const manufacturer = await getRepository(Manufacturer).findOne(
-    manufacturer_id
-  );
+  const manufacturer = await Manufacturer.findOne(manufacturer_id);
 
   if (!manufacturer) {
     throw new Error('The Brand with the given ID was Not Found');
   }
 
-  await getRepository(Manufacturer)
-    .createQueryBuilder()
-    .delete()
-    .from(Manufacturer)
-    .where('id = :id', { id: manufacturer.id })
-    .execute();
+  await Manufacturer.delete(manufacturer.id);
 
   res.json({
     manufacturer,

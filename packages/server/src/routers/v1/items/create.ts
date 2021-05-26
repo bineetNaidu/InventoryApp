@@ -1,6 +1,5 @@
 import { Response, Request } from 'express';
-import { getRepository } from 'typeorm';
-import { Item as ItemModel } from '../../../models/Items.model';
+import { Item } from '../../../models/Items.model';
 import { decodeJWT } from '../../../utils/jwtUtils';
 
 export const createItem = async (req: Request, res: Response) => {
@@ -18,19 +17,17 @@ export const createItem = async (req: Request, res: Response) => {
     req.headers.authorization!.split(' ')[1]
   );
 
-  const item = await getRepository(ItemModel)
-    .create({
-      name,
-      price,
-      has_warranty,
-      purchase_location,
-      info,
-      item_type,
-      // @ts-ignore
-      user_id: decodedToken!.id,
-      manufacturer_id,
-    })
-    .save();
+  const item = await Item.create({
+    name,
+    price,
+    has_warranty,
+    purchase_location,
+    info,
+    item_type,
+    // @ts-ignore
+    user_id: decodedToken!.id,
+    manufacturer_id,
+  }).save();
 
   res.json({
     item,

@@ -1,6 +1,5 @@
 import { Response, Request } from 'express';
-import { getRepository } from 'typeorm';
-import { Comment as CommentModel } from '../../../models/Comment.model';
+import { Comment } from '../../../models/Comment.model';
 import { decodeJWT } from '../../../utils/jwtUtils';
 
 export const createComment = async (req: Request, res: Response) => {
@@ -15,14 +14,12 @@ export const createComment = async (req: Request, res: Response) => {
   // @ts-ignore
   const author_id = decodedToken!.id;
 
-  const comment = await getRepository(CommentModel)
-    .create({
-      author_id,
-      comment: commentText,
-      commented_at: new Date().toUTCString(),
-      item_id,
-    })
-    .save();
+  const comment = await Comment.create({
+    author_id,
+    comment: commentText,
+    commented_at: new Date().toUTCString(),
+    item_id,
+  }).save();
 
   res.json({
     comment,

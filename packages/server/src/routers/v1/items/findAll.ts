@@ -1,9 +1,8 @@
 import { Response, Request } from 'express';
-import { getRepository } from 'typeorm';
-import { Item as ItemModel } from '../../../models/Items.model';
+import { Item } from '../../../models/Items.model';
 
 export const findAllItems = async (req: Request, res: Response) => {
-  const item = await getRepository(ItemModel).find({ order: { id: 'ASC' } });
+  const item = await Item.find({ order: { id: 'ASC' } });
 
   res.json({
     item,

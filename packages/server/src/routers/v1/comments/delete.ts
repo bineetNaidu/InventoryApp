@@ -1,12 +1,11 @@
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
-import { Comment as CommentModel } from '../../../models/Comment.model';
+import { Comment } from '../../../models/Comment.model';
 
 export const deleteComment = async (req: Request, res: Response) => {
   const item_id = req.params.item_id;
   const comment_id = req.query.id as string; // ! FIX THIS!
 
-  const comment = await getRepository(CommentModel).findOne({
+  const comment = await Comment.findOne({
     where: { id: comment_id, item_id },
   });
 
@@ -14,10 +13,9 @@ export const deleteComment = async (req: Request, res: Response) => {
     throw new Error('The Comment was Not Found');
   }
 
-  await getRepository(CommentModel)
-    .createQueryBuilder()
+  await Comment.createQueryBuilder()
     .delete()
-    .from(CommentModel)
+    .from(Comment)
     .where('id = :id', { id: comment.id })
     .execute();
 

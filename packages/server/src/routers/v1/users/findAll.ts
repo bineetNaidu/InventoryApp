@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
-import { User as UserModel } from '../../../models/User.model';
+import { User } from '../../../models/User.model';
 
 export const findAllUsers = async (req: Request, res: Response) => {
-  const user = await getRepository(UserModel).find({
+  const user = await User.find({
     select: ['id', 'username', 'country', 'date_of_birth', 'state'],
     order: {
       id: 'ASC',
