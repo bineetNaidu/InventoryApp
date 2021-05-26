@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import express from 'express';
 import logger from 'morgan';
 import helmet from 'helmet';

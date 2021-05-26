@@ -22,6 +22,8 @@ const PORT = process.env.PORT || 4242;
       url: process.env.DATABASE_URL,
       database: 'inventory_app',
       entities: [User, Comment, Item, Manufacturer],
+      logging: process.env.NODE_ENV !== 'production',
+      synchronize: process.env.NODE_ENV !== 'production',
     });
     connection.isConnected && console.log('>>> DB is Connected <<<');
   } catch (error) {
