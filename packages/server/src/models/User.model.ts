@@ -27,8 +27,8 @@ export class User extends BaseEntity {
 
   @Column('varchar', { length: 100 }) inventory_location?: string;
 
-  @CreateDateColumn({ type: 'date', default: Date.now() })
-  date_of_birth?: Date;
+  @Column({ type: 'varchar' })
+  date_of_birth?: string;
 
   @Column('boolean', { default: false })
   is_admin?: boolean;

@@ -14,7 +14,7 @@ export class Comment extends BaseEntity {
   @Column('varchar', { length: 80 })
   comment!: string;
 
-  @CreateDateColumn({ type: 'date', default: Date.now() })
+  @CreateDateColumn()
   commented_at?: Date;
 
   @Column('uuid') author_id!: string;
