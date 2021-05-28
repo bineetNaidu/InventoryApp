@@ -10,7 +10,7 @@ export const createItem = async (req: Request, res: Response) => {
     purchase_location,
     info,
     item_type,
-    manufacturer_id,
+    manufacturer,
   } = req.body;
 
   const decodedToken = await decodeJWT(
@@ -24,9 +24,8 @@ export const createItem = async (req: Request, res: Response) => {
     purchase_location,
     info,
     item_type,
-    // @ts-ignore
-    user_id: decodedToken!.id,
-    manufacturer_id,
+    manufacturer,
+    user_id: (decodedToken as any).id,
   }).save();
 
   res.json({

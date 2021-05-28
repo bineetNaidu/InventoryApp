@@ -28,5 +28,6 @@ export class Item extends BaseEntity {
 
   // ? one-to-on relations
   @Column('uuid') user_id!: string;
-  @Column('uuid') manufacturer_id!: string;
+
+  @Column('varchar') manufacturer!: string;
 }

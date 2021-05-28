@@ -4,7 +4,6 @@ import app from './app';
 import { User } from './models/User.model';
 import { Comment } from './models/Comment.model';
 import { Item } from './models/Items.model';
-import { Manufacturer } from './models/Manufacturer.model';
 import { ___prod___ } from './utils/constants';
 
 if (!___prod___) {
@@ -22,7 +21,7 @@ const PORT = process.env.PORT || 4242;
       type: 'postgres',
       url: process.env.DATABASE_URL,
       database: 'inventory_app',
-      entities: [User, Comment, Item, Manufacturer],
+      entities: [User, Comment, Item],
       logging: !___prod___,
       synchronize: !___prod___,
     });
