@@ -21,7 +21,7 @@ r.route('/v1/my-items').get(isAuthed, myItems);
 
 // *** Users Route ***
 r.route('/v1/users').post(signup).get(findAllUsers);
-r.use('/v1/users', findOneUser);
+r.use('/v1/users', isAuthed, isAdmin, findOneUser);
 
 r.route('/v1/items')
   .post(isAuthed, createItem)
