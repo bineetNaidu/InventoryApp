@@ -17,8 +17,12 @@ import { updateItem } from './items/update';
 import { deleteItem } from './items/delete';
 import { createComment } from './comments/create';
 import { deleteComment } from './comments/delete';
+import { myItems } from './myItems';
 
 const r = Router();
+
+// *** my items route ***
+r.route('/v1/my-items').get(isAuthed, myItems);
 
 // *** Users Route ***
 r.route('/v1/users').post(signup).get(findAllUsers);
