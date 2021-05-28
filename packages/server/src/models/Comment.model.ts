@@ -6,7 +6,7 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 
-@Entity('comments')
+@Entity('comment')
 export class Comment extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: number;

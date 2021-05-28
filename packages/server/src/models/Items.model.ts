@@ -5,7 +5,7 @@ enum ItemType {
   NonInventory = 'non-inventory',
   Service = 'service',
 }
-@Entity('items')
+@Entity('item')
 export class Item extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: number;

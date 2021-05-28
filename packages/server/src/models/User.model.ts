@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 
-@Entity('users')
+@Entity('user')
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: number;
