@@ -12,12 +12,6 @@ CREATE TABLE users (
  date_of_birth DATE,
  is_admin BOOLEAN NOT NULL
 );
--- Create a table called 'manufacturers'
-CREATE TABLE manufacturers (
- id SERIAL PRIMARY KEY NOT NULL,
- brand_name VARCHAR(50) NOT NULL,
- brand_type VARCHAR(50) NOT NULL
-);
 -- Create a type called 'item_type_enum'
 CREATE TYPE item_type_enum AS ENUM ('inventory', 'non-inventory', 'service');
 -- Create a table called 'items'
@@ -29,7 +23,7 @@ CREATE TABLE items (
  info VARCHAR(200),
  has_warranty BOOLEAN NOT NULL,
  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
- manufacturer_id INTEGER NOT NULL REFERENCES manufacturers(id),
+ manufacturer VARCHAR(200) NOT NULL,
  item_type item_type_enum NOT NULL
 );
 -- Create a table called 'comments'
@@ -42,6 +36,5 @@ CREATE TABLE comments (
 );
 -- DROPS
 DROP TABLE users;
-DROP TABLE manufacturers;
 DROP TABLE items;
 DROP TABLE comments;
