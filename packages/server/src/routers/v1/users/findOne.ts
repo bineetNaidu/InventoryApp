@@ -5,7 +5,7 @@ import { createJWT } from '../../../utils/jwtUtils';
 
 const r = Router();
 
-r.post('/find', async (req, res) => {
+r.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   const user = await User.findOne({
