@@ -11,7 +11,6 @@ export const isItemsOwner = async (
   const token = req.headers.authorization!.split(' ')[1];
   const decode = await decodeJWT(token);
 
-  // @ts-ignore
   const user_id = decode!.id;
   const item_id = req.params.id;
 
