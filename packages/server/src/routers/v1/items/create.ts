@@ -25,7 +25,7 @@ export const createItem = async (req: Request, res: Response) => {
     info,
     item_type,
     manufacturer,
-    user_id: (decodedToken as any).id,
+    user_id: decodedToken.id,
   }).save();
 
   res.json({

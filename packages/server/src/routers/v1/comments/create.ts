@@ -11,8 +11,7 @@ export const createComment = async (req: Request, res: Response) => {
     req.headers.authorization!.split(' ')[1]
   );
 
-  // @ts-ignore
-  const author_id = decodedToken!.id;
+  const author_id = decodedToken.id;
 
   const comment = await Comment.create({
     author_id,

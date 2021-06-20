@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import { Item } from '../../models/Items.model';
-import { User } from '../../models/User.model';
 import { decodeJWT } from '../../utils/jwtUtils';
 
 export const myItems = async (req: Request, res: Response) => {
@@ -12,7 +11,7 @@ export const myItems = async (req: Request, res: Response) => {
 
   const items = await Item.find({
     where: {
-      user_id: (decodedToken as User).id,
+      user_id: decodedToken.id,
     },
   });
 
