@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { decodeJWT } from '../utils/jwtUtils';
 
-export const isAuthed = (req: Request, res: Response, next: NextFunction) => {
+export const isAuthed = (req: Request, _res: Response, next: NextFunction) => {
   try {
     const token = req.headers.authorization!.split(' ')[1];
     const decode = decodeJWT(token);

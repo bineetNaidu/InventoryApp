@@ -3,7 +3,7 @@ import { decodeJWT } from '../utils/jwtUtils';
 
 export const isAdmin = async (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction
 ) => {
   try {
