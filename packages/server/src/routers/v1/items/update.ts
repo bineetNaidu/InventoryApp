@@ -4,9 +4,6 @@ import { Item } from '../../../models/Items.model';
 
 export const updateItem = async (req: Request, res: Response) => {
   const item_id = req.params.id;
-  const { name, price, has_warranty, purchase_location, info, item_type } =
-    req.body;
-
   const item = await Item.findOne(item_id);
 
   if (!item) {
@@ -16,14 +13,7 @@ export const updateItem = async (req: Request, res: Response) => {
   const updatedItem = await getConnection()
     .createQueryBuilder()
     .update(Item)
-    .set({
-      name,
-      price,
-      has_warranty,
-      purchase_location,
-      info,
-      item_type,
-    })
+    .set(req.body)
     .where('id = :id', { id: item.id })
     .returning('*')
     .execute();
