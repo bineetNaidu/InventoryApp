@@ -30,4 +30,4 @@ r.post('/login', async (req, res) => {
   });
 });
 
-export { r as findOneUser };
+export { r as loginRoute };

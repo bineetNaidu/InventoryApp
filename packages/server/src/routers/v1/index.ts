@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { signup } from './users/create';
 import { findAllUsers } from './users/findAll';
-import { findOneUser } from './users/findOne';
+import { loginRoute } from './users/findOne';
 import { isAuthed } from '../../middlewares/isAuthed';
 import { isAdmin } from '../../middlewares/isAdmin';
 import { createItem } from './items/create';
@@ -20,8 +20,9 @@ const r = Router();
 r.route('/v1/my-items').get(isAuthed, myItems);
 
 // *** Users Route ***
-r.route('/v1/users').post(signup).get(findAllUsers);
-r.use('/v1/users', findOneUser);
+r.route('/v1/users').get(findAllUsers);
+r.post('/v1/auth/signup', signup);
+r.use('/v1/auth', loginRoute);
 
 r.route('/v1/items')
   .post(isAuthed, createItem)
