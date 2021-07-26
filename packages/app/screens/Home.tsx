@@ -1,13 +1,11 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { FC, useLayoutEffect, useCallback } from 'react';
-import { Avatar } from 'react-native-elements';
-import {
-  StyleSheet,
-  Text,
-  SafeAreaView,
-  View,
-  TouchableOpacity,
-} from 'react-native';
+import { Avatar, Text } from 'react-native-elements';
+import { StyleSheet, SafeAreaView, View, TouchableOpacity } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
+import Main from './tabs/Main';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
@@ -45,9 +43,40 @@ const Home: FC<Props> = ({ navigation }) => {
     });
   }, [navigation]);
 
+  const Tab = createBottomTabNavigator<RootTabParamList>();
+
   return (
     <SafeAreaView style={styles.container}>
-      <Text>WelCome Home</Text>
+      <NavigationContainer independent>
+        <Tab.Navigator
+          initialRouteName="Main"
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+
+              if (route.name === 'Main') {
+                iconName = focused
+                  ? 'ios-information-circle'
+                  : 'ios-information-circle-outline';
+              } else if (route.name === 'Setting') {
+                iconName = focused ? 'ios-list-box' : 'ios-list';
+              }
+              // @ts-ignore
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+          })}
+          tabBarOptions={{
+            tabStyle: {
+              justifyContent: 'flex-start',
+              // alignContent: 'center',
+            },
+            activeTintColor: 'tomato',
+            inactiveTintColor: 'gray',
+          }}
+        >
+          <Tab.Screen name="Main" component={Main} />
+        </Tab.Navigator>
+      </NavigationContainer>
     </SafeAreaView>
   );
 };
@@ -55,7 +84,6 @@ const Home: FC<Props> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#5A4FD3',
   },
   headerRight: {
     marginRight: 15,
