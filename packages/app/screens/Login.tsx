@@ -4,13 +4,13 @@ import { Button, Input, Text } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
 import { KeyboardAvoidingView, StyleSheet, View } from 'react-native';
 
-type ProfileScreenNavigationProp = StackNavigationProp<
+type LoginScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'Login'
 >;
 
 interface Props {
-  navigation: ProfileScreenNavigationProp;
+  navigation: LoginScreenNavigationProp;
 }
 
 const Login: FC<Props> = ({ navigation }) => {
@@ -28,7 +28,9 @@ const Login: FC<Props> = ({ navigation }) => {
   }, []);
 
   const handleLogin = useCallback(() => {
-    async () => {};
+    async () => {
+      navigation.navigate('Home');
+    };
   }, []);
 
   return (

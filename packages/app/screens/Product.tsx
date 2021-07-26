@@ -3,13 +3,13 @@ import { StyleSheet, View } from 'react-native';
 import { Button, Text } from 'react-native-elements';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-type ProfileScreenNavigationProp = StackNavigationProp<
+type ProductScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'Product'
 >;
 
 interface Props {
-  navigation: ProfileScreenNavigationProp;
+  navigation: ProductScreenNavigationProp;
 }
 
 const Product: FC<Props> = ({ navigation }) => {
