@@ -4,7 +4,7 @@ import { Avatar } from 'react-native-elements';
 import { StyleSheet, SafeAreaView, View, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, AntDesign } from '@expo/vector-icons';
 import Main from './tabs/Main';
 import NewItem from './tabs/NewItem';
 
@@ -51,32 +51,44 @@ const Home: FC<Props> = ({ navigation }) => {
       <NavigationContainer independent>
         <Tab.Navigator
           initialRouteName="Main"
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
-
-              if (route.name === 'Main') {
-                iconName = focused
-                  ? 'ios-information-circle'
-                  : 'ios-information-circle-outline';
-              } else if (route.name === 'NewItem') {
-                iconName = focused ? 'ios-list-box' : 'ios-list';
-              }
-              // @ts-ignore
-              return <Ionicons name={iconName} size={size} color={color} />;
-            },
-          })}
           tabBarOptions={{
             tabStyle: {
               justifyContent: 'flex-start',
-              // alignContent: 'center',
+              backgroundColor: '#442BAA',
+              alignContent: 'center',
             },
-            activeTintColor: 'tomato',
+            activeTintColor: '#D6D1E8',
             inactiveTintColor: 'gray',
           }}
         >
-          <Tab.Screen name="Main" component={Main} options={{}} />
-          <Tab.Screen name="NewItem" component={NewItem} />
+          <Tab.Screen
+            name="Main"
+            component={Main}
+            options={{
+              tabBarLabel: () => null,
+              tabBarIcon: ({ focused, color, size }) => (
+                <AntDesign
+                  name={focused ? 'appstore1' : 'appstore-o'}
+                  color={color}
+                  size={size}
+                />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="NewItem"
+            component={NewItem}
+            options={{
+              tabBarLabel: () => null,
+              tabBarIcon: ({ focused, color, size }) => (
+                <AntDesign
+                  name={focused ? 'plussquare' : 'plussquareo'}
+                  color={color}
+                  size={size}
+                />
+              ),
+            }}
+          />
         </Tab.Navigator>
       </NavigationContainer>
     </SafeAreaView>
