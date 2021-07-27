@@ -1,11 +1,12 @@
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { FC, useLayoutEffect, useCallback } from 'react';
-import { Avatar, Text } from 'react-native-elements';
+import { Avatar } from 'react-native-elements';
 import { StyleSheet, SafeAreaView, View, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import Main from './tabs/Main';
+import NewItem from './tabs/NewItem';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
@@ -58,7 +59,7 @@ const Home: FC<Props> = ({ navigation }) => {
                 iconName = focused
                   ? 'ios-information-circle'
                   : 'ios-information-circle-outline';
-              } else if (route.name === 'Setting') {
+              } else if (route.name === 'NewItem') {
                 iconName = focused ? 'ios-list-box' : 'ios-list';
               }
               // @ts-ignore
@@ -74,7 +75,8 @@ const Home: FC<Props> = ({ navigation }) => {
             inactiveTintColor: 'gray',
           }}
         >
-          <Tab.Screen name="Main" component={Main} />
+          <Tab.Screen name="Main" component={Main} options={{}} />
+          <Tab.Screen name="NewItem" component={NewItem} />
         </Tab.Navigator>
       </NavigationContainer>
     </SafeAreaView>
