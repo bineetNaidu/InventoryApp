@@ -1,23 +1,29 @@
-import { Router } from 'express';
 import * as bcrypt from 'bcryptjs';
-import { User } from '../../../models/User.model';
+import { body } from 'express-validator';
+import { Request, Response } from 'express';
+import { User } from '../../../models/Users';
 import { createJWT } from '../../../utils/jwtUtils';
+import { BadRequestError } from '../../../utils/BadRequestError';
 
-const r = Router();
+export const loginValidation = [
+  body('username').not().isEmpty().trim().escape(),
+  body('password').not().isEmpty().trim().escape(),
+];
 
-r.post('/login', async (req, res) => {
+export const loginRoute = async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
   const user = await User.findOne({
     where: { username },
+    relations: ['inventory_location'],
   });
   if (!user) {
-    throw new Error('User Not Found with the given username!');
+    throw new BadRequestError('User Not Found with the given username!');
   }
   const valid = await bcrypt.compare(password, user.password);
 
   if (!valid) {
-    throw new Error('Incorrect Password!');
+    throw new BadRequestError('Incorrect Password!');
   }
   const token = await createJWT(user.id, user.email, user.is_admin || false);
 
@@ -25,9 +31,5 @@ r.post('/login', async (req, res) => {
     user, // ! REMOVE USER's PASSWORD IN API RESPONSNS!
     token,
     success: true,
-    status: req.statusCode || 200,
-    message: req.statusMessage || 'OK',
   });
-});
-
-export { r as loginRoute };
+};
