@@ -20,7 +20,7 @@ export const isItemsOwner = async (
   if (!item) throw new BadRequestError('Item Not Found');
 
   // @ts-ignore
-  if (item && item.user_id === user_id) {
+  if (item && item.user === user_id) {
     return next();
   }
   throw new NotAuthorizedError();

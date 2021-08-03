@@ -11,7 +11,6 @@ export const isAdmin = async (
     const token = req.headers.authorization!.split(' ')[1];
     const decode = await decodeJWT(token);
 
-    // @ts-ignore
     if (decode && decode.is_admin) {
       return next();
     } else {
