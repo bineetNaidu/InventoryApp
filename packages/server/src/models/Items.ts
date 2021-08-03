@@ -25,7 +25,7 @@ export class Item extends BaseEntity {
 
   @Column('text') sku?: string;
 
-  @Column('datetime') expiration_date!: string;
+  @Column('time with time zone') expiration_date!: string;
 
   @Column('varchar', { length: 200 }) purchase_location?: string;
 
