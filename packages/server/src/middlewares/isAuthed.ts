@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { NotAuthorizedError } from '../utils/NotAuthorized';
 import { decodeJWT } from '../utils/jwtUtils';
 
 export const isAuthed = (req: Request, _res: Response, next: NextFunction) => {
@@ -10,10 +11,10 @@ export const isAuthed = (req: Request, _res: Response, next: NextFunction) => {
       if (data) {
         return next();
       } else {
-        throw new Error('Please Log in First');
+        throw new NotAuthorizedError();
       }
     });
   } catch (e) {
-    throw new Error('Please Log in First');
+    throw new NotAuthorizedError();
   }
 };

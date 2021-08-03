@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
+import { NotAuthorizedError } from '../utils/NotAuthorized';
 import { decodeJWT } from '../utils/jwtUtils';
 
 export const isAdmin = async (
@@ -14,9 +15,9 @@ export const isAdmin = async (
     if (decode && decode.is_admin) {
       return next();
     } else {
-      throw new Error('UNAUTHORIZED ACCESS!');
+      throw new NotAuthorizedError();
     }
   } catch (e) {
-    throw new Error('UNAUTHORIZED ACCESS!');
+    throw new NotAuthorizedError();
   }
 };
