@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { param, query } from 'express-validator';
-import { Comment } from '../../../models/Comments';
+import { Comment } from '../../models/Comments';
 
 export const deleteCommentValidations = [
   param('item_id')

@@ -1,9 +1,9 @@
 import { Response, Request } from 'express';
 import { body } from 'express-validator';
-import { InventoryLocations } from '../../../models/InventoryLocations';
-import { BadRequestError } from '../../../utils/BadRequestError';
-import { User } from '../../../models/Users';
-import { createJWT } from '../../../utils/jwtUtils';
+import { InventoryLocations } from '../../models/InventoryLocations';
+import { BadRequestError } from '../../utils/BadRequestError';
+import { User } from '../../models/Users';
+import { createJWT } from '../../utils/jwtUtils';
 
 export const signupValidation = [
   body('email').isEmail().normalizeEmail(),

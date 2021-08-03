@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
-import { Item } from '../../../models/Items';
-import { BadRequestError } from '../../../utils/BadRequestError';
+import { Item } from '../../models/Items';
+import { BadRequestError } from '../../utils/BadRequestError';
 
 export const deleteItem = async (req: Request, res: Response) => {
   const item_id = req.params.id;

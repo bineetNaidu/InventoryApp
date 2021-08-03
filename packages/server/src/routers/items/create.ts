@@ -1,10 +1,10 @@
 import { Response, Request } from 'express';
 import { body } from 'express-validator';
-import { ItemTypes } from '../../../models/ItemTypes';
-import { Manufacturers } from '../../../models/Manufacturers';
-import { Item } from '../../../models/Items';
-import { BadRequestError } from '../../../utils/BadRequestError';
-import { decodeJWT } from '../../../utils/jwtUtils';
+import { ItemTypes } from '../../models/ItemTypes';
+import { Manufacturers } from '../../models/Manufacturers';
+import { Item } from '../../models/Items';
+import { BadRequestError } from '../../utils/BadRequestError';
+import { decodeJWT } from '../../utils/jwtUtils';
 
 export const createItemValidation = [
   body('name')

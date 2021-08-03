@@ -1,6 +1,6 @@
 import { Response, Request } from 'express';
-import { decodeJWT } from '../../../utils/jwtUtils';
-import { Item } from '../../../models/Items';
+import { decodeJWT } from '../../utils/jwtUtils';
+import { Item } from '../../models/Items';
 
 export const findAllItems = async (req: Request, res: Response) => {
   const decodedToken = await decodeJWT(

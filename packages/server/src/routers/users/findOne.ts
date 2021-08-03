@@ -1,9 +1,9 @@
 import * as bcrypt from 'bcryptjs';
 import { body } from 'express-validator';
 import { Request, Response } from 'express';
-import { User } from '../../../models/Users';
-import { createJWT } from '../../../utils/jwtUtils';
-import { BadRequestError } from '../../../utils/BadRequestError';
+import { User } from '../../models/Users';
+import { createJWT } from '../../utils/jwtUtils';
+import { BadRequestError } from '../../utils/BadRequestError';
 
 export const loginValidation = [
   body('username').not().isEmpty().trim().escape(),

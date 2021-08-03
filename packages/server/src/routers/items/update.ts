@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { getConnection } from 'typeorm';
-import { Item } from '../../../models/Items';
+import { Item } from '../../models/Items';
 
 export const updateItem = async (req: Request, res: Response) => {
   const item_id = req.params.id;

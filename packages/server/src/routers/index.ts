@@ -2,17 +2,17 @@ import { Router } from 'express';
 import { signup, signupValidation } from './users/create';
 import { findAllUsers } from './users/findAll';
 import { loginRoute, loginValidation } from './users/findOne';
-import { isAuthed } from '../../middlewares/isAuthed';
+import { isAuthed } from '../middlewares/isAuthed';
 import { createItem, createItemValidation } from './items/create';
 import { findAllItems } from './items/findAll';
 import { findItem } from './items/findOne';
-import { isItemsOwner } from '../../middlewares/isOwner';
+import { isItemsOwner } from '../middlewares/isOwner';
 import { updateItem } from './items/update';
 import { deleteItem } from './items/delete';
 import { createComment, createCommentValidations } from './comments/create';
 import { deleteComment, deleteCommentValidations } from './comments/delete';
-import { validateRequest } from '../../middlewares/validateRequest';
-import { isAdmin } from '../../middlewares/isAdmin';
+import { validateRequest } from '../middlewares/validateRequest';
+import { isAdmin } from '../middlewares/isAdmin';
 
 const r = Router();
 

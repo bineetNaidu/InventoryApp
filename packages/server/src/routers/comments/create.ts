@@ -1,7 +1,7 @@
 import { Response, Request } from 'express';
 import { body } from 'express-validator';
-import { Comment } from '../../../models/Comments';
-import { decodeJWT } from '../../../utils/jwtUtils';
+import { Comment } from '../../models/Comments';
+import { decodeJWT } from '../../utils/jwtUtils';
 
 export const createCommentValidations = [
   body('body')
