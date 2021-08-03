@@ -4,12 +4,16 @@ import {
   PrimaryGeneratedColumn,
   BaseEntity,
   BeforeInsert,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
+import { InventoryLocations } from './InventoryLocations';
 
-@Entity('user')
+@Entity('users')
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   id!: number;
 
   @Column('varchar', { unique: true, length: 24 })
@@ -20,17 +24,17 @@ export class User extends BaseEntity {
 
   @Column('text') password!: string;
 
-  @Column('varchar') country!: string;
-
-  @Column('varchar') state?: string;
-
-  @Column('varchar', { length: 100 }) inventory_location?: string;
-
-  @Column({ type: 'varchar' })
-  date_of_birth?: string;
+  @ManyToOne(() => InventoryLocations, (il) => il.id)
+  inventory_location: InventoryLocations;
 
   @Column('boolean', { default: false })
   is_admin?: boolean;
+
+  @CreateDateColumn()
+  created_at?: string;
+
+  @UpdateDateColumn()
+  updated_at?: string;
 
   @BeforeInsert()
   async hashPasswordBeforeInsert() {
