@@ -40,12 +40,8 @@ export const createItemValidation = [
     .withMessage('Should have a expiration_date in the format of YYYY-MM-DD')
     .trim()
     .escape(),
-  body('purchase_location')
-    .not()
-    .isEmpty()
-    .withMessage('Should have a purchase_location')
-    .trim()
-    .escape(),
+  body('purchase_location').trim().escape(),
+  body('sku').trim().escape(),
   body('manufacturer_id')
     .not()
     .isEmpty()

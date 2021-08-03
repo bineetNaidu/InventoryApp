@@ -6,7 +6,7 @@ import { createItemValidation, createItem } from './create';
 import { deleteItem } from './delete';
 import { findAllItems } from './findAll';
 import { findItem } from './findOne';
-import { updateItem } from './update';
+import { updateItem, updateItemValidations } from './update';
 
 const r = Router();
 
@@ -15,7 +15,13 @@ r.route('/')
   .get(isAuthed, findAllItems);
 r.route('/:id')
   .get(isAuthed, isItemsOwner, findItem)
-  .put(isAuthed, isItemsOwner, updateItem)
+  .put(
+    isAuthed,
+    isItemsOwner,
+    updateItemValidations,
+    validateRequest,
+    updateItem
+  )
   .delete(isAuthed, isItemsOwner, deleteItem);
 
 export { r as itemRoutes };
