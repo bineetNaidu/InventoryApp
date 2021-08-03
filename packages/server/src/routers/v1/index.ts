@@ -3,7 +3,7 @@ import { signup, signupValidation } from './users/create';
 import { findAllUsers } from './users/findAll';
 import { loginRoute, loginValidation } from './users/findOne';
 import { isAuthed } from '../../middlewares/isAuthed';
-import { createItem } from './items/create';
+import { createItem, createItemValidation } from './items/create';
 import { findAllItems } from './items/findAll';
 import { findItem } from './items/findOne';
 import { isItemsOwner } from '../../middlewares/isOwner';
@@ -21,7 +21,9 @@ r.route('/v1/users').get(isAuthed, isAdmin, findAllUsers);
 r.post('/v1/auth/signup', signupValidation, validateRequest, signup);
 r.post('/v1/auth/login', loginValidation, validateRequest, loginRoute);
 
-r.route('/v1/items').post(isAuthed, createItem).get(isAuthed, findAllItems);
+r.route('/v1/items')
+  .post(isAuthed, createItemValidation, validateRequest, createItem)
+  .get(isAuthed, findAllItems);
 r.route('/v1/items/:id')
   .get(isAuthed, isItemsOwner, findItem)
   .put(isAuthed, isItemsOwner, updateItem)
