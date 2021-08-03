@@ -9,8 +9,8 @@ import { findItem } from './items/findOne';
 import { isItemsOwner } from '../../middlewares/isOwner';
 import { updateItem } from './items/update';
 import { deleteItem } from './items/delete';
-import { createComment } from './comments/create';
-import { deleteComment } from './comments/delete';
+import { createComment, createCommentValidations } from './comments/create';
+import { deleteComment, deleteCommentValidations } from './comments/delete';
 import { validateRequest } from '../../middlewares/validateRequest';
 import { isAdmin } from '../../middlewares/isAdmin';
 
@@ -30,7 +30,7 @@ r.route('/v1/items/:id')
   .delete(isAuthed, isItemsOwner, deleteItem);
 
 r.route('/v1/comments/:item_id')
-  .post(isAuthed, createComment)
-  .delete(isAuthed, deleteComment);
+  .post(isAuthed, createCommentValidations, validateRequest, createComment)
+  .delete(isAuthed, deleteCommentValidations, validateRequest, deleteComment);
 
 export { r as v1Routes };
