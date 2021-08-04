@@ -8,7 +8,7 @@ import ExpressErrorHandler from './utils/ExpressErrorHandler';
 import 'express-async-errors';
 
 // ***** Routers Routes ******
-import { v1Routes } from './routers/v1';
+import { v1Routes } from './routers';
 
 //  ****** Constants *******
 const app = express();

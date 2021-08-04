@@ -1,5 +1,5 @@
 import { Response, Request } from 'express';
-import { Item } from '../../../models/Items.model';
+import { Item } from '../../models/Items';
 
 export const findItem = async (req: Request, res: Response) => {
   const item_id = req.params.id;

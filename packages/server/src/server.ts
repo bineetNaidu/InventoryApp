@@ -1,10 +1,14 @@
-import { Connection, createConnection } from 'typeorm';
 import dotenv from 'dotenv';
+import path from 'path';
 import app from './app';
-import { User } from './models/User.model';
-import { Comment } from './models/Comment.model';
-import { Item } from './models/Items.model';
+import { Connection, createConnection } from 'typeorm';
+import { User } from './models/Users';
+import { Comment } from './models/Comments';
+import { Item } from './models/Items';
 import { ___prod___ } from './utils/constants';
+import { InventoryLocations } from './models/InventoryLocations';
+import { ItemTypes } from './models/ItemTypes';
+import { Manufacturers } from './models/Manufacturers';
 
 if (!___prod___) {
   dotenv.config();
@@ -21,11 +25,21 @@ const PORT = process.env.PORT || 4242;
       type: 'postgres',
       url: process.env.DATABASE_URL,
       database: 'inventory_app',
-      entities: [User, Comment, Item],
+      entities: [
+        InventoryLocations,
+        ItemTypes,
+        Manufacturers,
+        User,
+        Item,
+        Comment,
+      ],
       logging: !___prod___,
-      synchronize: !___prod___,
+      synchronize: true, //!___prod___,
+      migrations: [path.join(__dirname, './migrations/*')],
     });
     connection.isConnected && console.log('>>> DB is Connected <<<');
+
+    await connection.runMigrations();
   } catch (error) {
     console.log('!!!! >> ', error.message, '<< !!!!');
     process.exit(1);

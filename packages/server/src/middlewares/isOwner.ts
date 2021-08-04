@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
+import { BadRequestError } from '../utils/BadRequestError';
+import { NotAuthorizedError } from '../utils/NotAuthorized';
 import { getRepository } from 'typeorm';
-import { Item } from '../models/Items.model';
+import { Item } from '../models/Items';
 import { decodeJWT } from '../utils/jwtUtils';
 
 export const isItemsOwner = async (
@@ -15,10 +17,11 @@ export const isItemsOwner = async (
   const item_id = req.params.id;
 
   const item = await getRepository(Item).findOne(item_id);
-  if (!item) throw new Error('Item Not Found');
+  if (!item) throw new BadRequestError('Item Not Found');
 
-  if (item && item.user_id === user_id) {
+  // @ts-ignore
+  if (item && item.user === user_id) {
     return next();
   }
-  throw new Error('Not Authorized To Access The Data!');
+  throw new NotAuthorizedError();
 };
