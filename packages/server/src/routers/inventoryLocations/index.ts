@@ -18,7 +18,7 @@ import {
 
 const r = Router();
 
-r.route('/inventory_location')
+r.route('/')
   .post(
     isAuthed,
     isAdmin,
@@ -28,7 +28,7 @@ r.route('/inventory_location')
   )
   .get(isAuthed, getInventoryLocations);
 
-r.route('/inventory_location/:id')
+r.route('/:id')
   .put(
     isAuthed,
     isAdmin,
@@ -44,4 +44,4 @@ r.route('/inventory_location/:id')
     deleteInventoryLocation
   );
 
-export { r as inventoryLocationsRouters };
+export { r as inventoryLocationsRoutes };
