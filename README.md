@@ -10,11 +10,11 @@ A Home Inventory App.
 
 ---
 
-## Database Model Deign
+## Database Model Design Docs
 
 ---
 
-![Screenshot - Schema Model Design](.plans/SchemaDesigns.jpg)
+The file was moved [here](https://github.com/bineetNaidu/InventoryApp/blob/staging/docs/database.md)
 
 ## Contributing
 
