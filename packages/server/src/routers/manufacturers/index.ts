@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { isAdmin } from 'src/middlewares/isAdmin';
-import { isAuthed } from 'src/middlewares/isAuthed';
-import { validateRequest } from 'src/middlewares/validateRequest';
+import { isAdmin } from '../../middlewares/isAdmin';
+import { isAuthed } from '../../middlewares/isAuthed';
+import { validateRequest } from '../../middlewares/validateRequest';
 import { createManufacturer, manufacturerValidation } from './create';
 import { deleteManufacturer } from './delete';
 import { getAllManufacturers } from './findAll';
