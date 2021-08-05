@@ -14,7 +14,7 @@ let conn: Connection;
 declare global {
   namespace NodeJS {
     interface Global {
-      signin(isAdmin: boolean): string[];
+      signin(isAdmin?: boolean): Promise<string>;
     }
   }
 }
@@ -48,11 +48,8 @@ afterAll(async () => {
   await conn.close();
 });
 
-global.signin = (admin = false) => {
+global.signin = async (admin = false) => {
   //? Create a JWT
-  const token = createJWT(1, 'test@test.com', admin);
-  const session = { token };
-  const sessJson = JSON.stringify(session);
-  const base64 = Buffer.from(sessJson).toString('base64');
-  return [`express:sess=${base64}`];
+  const token = await createJWT(1, 'test@test.com', admin);
+  return token;
 };
