@@ -1,5 +1,6 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { FC, useLayoutEffect, useCallback } from 'react';
+import React, { FC, useLayoutEffect, useCallback, useEffect } from 'react';
 import { Avatar } from 'react-native-elements';
 import { StyleSheet, SafeAreaView, View, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -16,8 +17,22 @@ interface Props {
 
 const Home: FC<Props> = ({ navigation }) => {
   const handleLogout = useCallback(() => {
+    AsyncStorage.removeItem('@InventoryAppToken', (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
     navigation.replace('Login');
   }, [navigation]);
+
+  useEffect(() => {
+    AsyncStorage.getItem('@InventoryAppToken').then((data) => {
+      if (data == null) {
+        handleLogout();
+      }
+      return;
+    });
+  }, []);
 
   useLayoutEffect(() => {
     navigation.setOptions({
