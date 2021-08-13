@@ -26,7 +26,7 @@ r.route('/')
     validateRequest,
     createInventoryLocation
   )
-  .get(isAuthed, getInventoryLocations);
+  .get(getInventoryLocations);
 
 r.route('/:id')
   .put(
