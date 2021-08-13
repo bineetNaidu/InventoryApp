@@ -14,41 +14,61 @@ type RootTabParamList = {
   EditItem: { id: string };
 };
 
-enum ItemType {
-  Inventory = 'inventory',
-  NonInventory = 'non-inventory',
-  Service = 'service',
-}
-
-type User = {
+type UserType = {
   id: number;
   username: string;
   email: string;
-  password: string;
-  country: string;
-  state?: string;
-  inventory_location?: string;
-  date_of_birth?: string;
+  inventory_location: InventoryLocationsType;
   is_admin?: boolean;
+  created_at?: string;
+  updated_at?: string;
 };
 
-type Item = {
+type ItemsType = {
   id: number;
   name: string;
+  info: string;
   price: number;
-  has_warranty?: boolean;
+  sku?: string;
+  expiration_date: string;
   purchase_location?: string;
-  info?: string;
-  item_type: ItemType;
-  user_id: string;
-  manufacturer: string;
+  item_type: ItemTypesType;
+  user: UserType;
+  manufacturer: ManufacturersType;
+  created_at?: string;
+  updated_at?: string;
 };
 
-// @ts-ignore
-type Comment = {
+type CommentsType = {
   id: number;
-  comment: string;
-  commented_at?: Date | string;
+  body: string;
   author_id: string;
   item_id: string;
+  created_at?: string;
+  updated_at?: string;
+};
+
+type InventoryLocationsType = {
+  id: number;
+  location: string;
+  created_at?: string;
+  updated_at?: string;
+};
+
+type ItemTypesType = {
+  id: number;
+  name: string;
+  created_at?: string;
+  updated_at?: string;
+};
+
+type ManufacturersType = {
+  id: number;
+  name: string;
+  description: string;
+  contacts: string;
+  website: string;
+  logo_url: string;
+  created_at?: string;
+  updated_at?: string;
 };
