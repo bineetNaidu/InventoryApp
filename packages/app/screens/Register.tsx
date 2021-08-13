@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { FC, useLayoutEffect, useState } from 'react';
 import { Button, Input, Text } from 'react-native-elements';
@@ -46,7 +47,9 @@ const Register: FC<Props> = ({ navigation }) => {
 
       if (data.success && data.token) {
         // ! save the token in Storage
-        // set all state to ''
+        await AsyncStorage.setItem('@InventoryAppToken', data.token, (err) =>
+          alert(err?.message)
+        );
         setUsername('');
         setPassword('');
         setEmail('');

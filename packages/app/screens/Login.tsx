@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { FC, useLayoutEffect, useState } from 'react';
 import { Button, Input, Text } from 'react-native-elements';
@@ -32,16 +33,16 @@ const Login: FC<Props> = ({ navigation }) => {
   const handleLogin = async () => {
     try {
       setLoading(true);
-      const { data, request } = await ax.post<{
+      const { data } = await ax.post<{
         user: UserType;
         token: string;
         success: boolean;
-      }>('/auth/login', {});
-      console.log(data);
-      console.log('-----');
-      console.log(request);
-      if (data.success) {
+      }>('/auth/login', { username, password });
+      if (data.success && data.token) {
+        await AsyncStorage.setItem('@InventoryAppToken', data.token);
         setLoading(false);
+        setPassword('');
+        setUsername('');
         navigation.navigate('Home');
       }
     } catch (err) {
