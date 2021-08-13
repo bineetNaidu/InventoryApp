@@ -1,8 +1,16 @@
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { FC, useLayoutEffect, useState, useCallback } from 'react';
+import React, { FC, useLayoutEffect, useState } from 'react';
 import { Button, Input, Text } from 'react-native-elements';
 import { AntDesign, FontAwesome } from '@expo/vector-icons';
-import { StyleSheet, KeyboardAvoidingView, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  KeyboardAvoidingView,
+  ScrollView,
+  View,
+} from 'react-native';
+import { useInventoryLocationStore } from '../lib/inventoryLocation.store';
+import RNPickerSelect from 'react-native-picker-select';
+import { ax } from '../lib/axios';
 
 type RegisterScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -14,15 +22,44 @@ interface Props {
 }
 
 const Register: FC<Props> = ({ navigation }) => {
+  const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
-  const [inventory_location, setInventoryLocation] = useState('');
+  const [inventory_location_id, setInventoryLocationId] = useState(1);
+  const inventories = useInventoryLocationStore((s) => s.inventories);
 
-  const handleRegister = useCallback(() => {
-    navigation.navigate('Home');
-  }, [navigation]);
+  const handleRegister = async () => {
+    setLoading(true);
+    if (password === passwordConfirm) {
+      const { data } = await ax.post<{
+        user: UserType;
+        token: string;
+        success: boolean;
+      }>('/auth/signup', {
+        username,
+        email,
+        password,
+        inventory_location_id,
+      });
+
+      if (data.success && data.token) {
+        // ! save the token in Storage
+        // set all state to ''
+        setUsername('');
+        setPassword('');
+        setEmail('');
+        setPasswordConfirm('');
+        setInventoryLocationId(1);
+        setLoading(false);
+        navigation.navigate('Home');
+      }
+    } else {
+      alert("Your Confirmed password doesn't match to you original password");
+      setLoading(false);
+    }
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -62,16 +99,35 @@ const Register: FC<Props> = ({ navigation }) => {
           value={username}
           onChangeText={(username) => setUsername(username)}
         />
-        <Input
-          style={styles.input}
-          label="Inventory Location"
-          labelStyle={styles.labels}
-          leftIcon={<FontAwesome name="globe" size={24} color="#fff" />}
-          value={inventory_location}
-          onChangeText={(inventory_location) =>
-            setInventoryLocation(inventory_location)
-          }
-        />
+        <View style={{ marginBottom: 15 }}>
+          <View
+            style={{ ...styles.input, flexDirection: 'row', marginBottom: 5 }}
+          >
+            <FontAwesome name="globe" size={24} color="#fff" />
+            <Text style={{ ...styles.labels, marginLeft: 5, fontSize: 16 }}>
+              Inventory Location
+            </Text>
+          </View>
+          <RNPickerSelect
+            value={inventory_location_id}
+            style={{
+              placeholder: {
+                color: '#bcbec1',
+                fontWeight: 'bold',
+              },
+              inputAndroid: { color: '#fff', fontWeight: 'bold' },
+              inputIOS: { color: '#fff', fontWeight: 'bold' },
+              inputWeb: { color: '#fff', fontWeight: 'bold' },
+            }}
+            useNativeAndroidPickerStyle
+            onValueChange={(iv) => setInventoryLocationId(iv)}
+            items={inventories.map((i) => ({
+              label: i.location,
+              value: i.id,
+              key: i.id,
+            }))}
+          />
+        </View>
         <Input
           secureTextEntry
           label="Password"
@@ -92,7 +148,18 @@ const Register: FC<Props> = ({ navigation }) => {
           }
           onSubmitEditing={handleRegister}
         />
-        <Button title="Register!" onPress={handleRegister} />
+        <Button
+          title="Register!"
+          loading={loading}
+          disabled={
+            !username ||
+            !password ||
+            !passwordConfirm ||
+            !email ||
+            !inventory_location_id
+          }
+          onPress={handleRegister}
+        />
         <Button
           title="Have an Account!"
           type="clear"
