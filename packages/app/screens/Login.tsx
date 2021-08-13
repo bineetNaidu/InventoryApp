@@ -1,8 +1,9 @@
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { FC, useCallback, useLayoutEffect, useState } from 'react';
+import React, { FC, useLayoutEffect, useState } from 'react';
 import { Button, Input, Text } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
 import { KeyboardAvoidingView, StyleSheet, View } from 'react-native';
+import { ax } from '../lib/axios';
 
 type LoginScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -16,6 +17,7 @@ interface Props {
 const Login: FC<Props> = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -27,11 +29,26 @@ const Login: FC<Props> = ({ navigation }) => {
     });
   }, []);
 
-  const handleLogin = useCallback(() => {
-    async () => {
-      navigation.navigate('Home');
-    };
-  }, []);
+  const handleLogin = async () => {
+    try {
+      setLoading(true);
+      const { data, request } = await ax.post<{
+        user: UserType;
+        token: string;
+        success: boolean;
+      }>('/auth/login', {});
+      console.log(data);
+      console.log('-----');
+      console.log(request);
+      if (data.success) {
+        setLoading(false);
+        navigation.navigate('Home');
+      }
+    } catch (err) {
+      alert(err.message);
+      setLoading(false);
+    }
+  };
 
   return (
     <KeyboardAvoidingView style={styles.container}>
@@ -63,7 +80,12 @@ const Login: FC<Props> = ({ navigation }) => {
           onChangeText={(password) => setPassword(password)}
           onSubmitEditing={handleLogin}
         />
-        <Button title="Login!" onPress={handleLogin} />
+        <Button
+          title="Login!"
+          disabled={!username || !password}
+          loading={loading}
+          onPress={handleLogin}
+        />
         <Button
           title="Don't have an Account!"
           type="clear"
