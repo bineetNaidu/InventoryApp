@@ -5,9 +5,13 @@ import { Avatar } from 'react-native-elements';
 import { StyleSheet, SafeAreaView, View, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Ionicons, AntDesign } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import Main from './tabs/Main';
 import NewItem from './tabs/NewItem';
+import { ax } from '../lib/axios';
+import { useItemStore } from '../lib/items.store';
+import { useManufacturersStore } from '../lib/manufacturers.store';
+import { useItemTypesStore } from '../lib/itemsTypes.store';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
@@ -16,6 +20,10 @@ interface Props {
 }
 
 const Home: FC<Props> = ({ navigation }) => {
+  const setItems = useItemStore((s) => s.setItems);
+  const setManufacturers = useManufacturersStore((s) => s.setManufacturers);
+  const setItemsTypes = useItemTypesStore((s) => s.setItemsTypes);
+
   const handleLogout = useCallback(() => {
     AsyncStorage.removeItem('@InventoryAppToken', (err) => {
       if (err) {
@@ -25,7 +33,62 @@ const Home: FC<Props> = ({ navigation }) => {
     navigation.replace('Login');
   }, [navigation]);
 
+  const handleFetchItems = useCallback(async () => {
+    const token = await AsyncStorage.getItem('@InventoryAppToken');
+    if (!token) return;
+    const { data } = await ax.get<{
+      items: ItemsType[];
+      length: number;
+      success: boolean;
+    }>('/items', {
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    });
+
+    if (data.success) {
+      setItems(data.items);
+    }
+  }, [setItems]);
+
+  const handleFetchManufacturers = useCallback(async () => {
+    const token = await AsyncStorage.getItem('@InventoryAppToken');
+    if (!token) return;
+    const { data } = await ax.get<{
+      manufacturers: ManufacturersType[];
+      length: number;
+      success: boolean;
+    }>('/manufacturers', {
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    });
+    if (data.success) {
+      setManufacturers(data.manufacturers);
+    }
+  }, [setManufacturers]);
+
+  const handleFetchItemsTypes = useCallback(async () => {
+    const token = await AsyncStorage.getItem('@InventoryAppToken');
+    if (!token) return;
+    const { data } = await ax.get<{
+      itemsTypes: ItemTypesType[];
+      length: number;
+      success: boolean;
+    }>('/item_types', {
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+    });
+    if (data.success) {
+      setItemsTypes(data.itemsTypes);
+    }
+  }, [setItemsTypes]);
+
   useEffect(() => {
+    handleFetchItems();
+    handleFetchManufacturers();
+    handleFetchItemsTypes();
     AsyncStorage.getItem('@InventoryAppToken').then((data) => {
       if (data == null) {
         handleLogout();
