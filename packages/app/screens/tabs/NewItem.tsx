@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { FC, useState, useCallback } from 'react';
+import React, { FC, useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -26,15 +26,14 @@ type Props = {
 };
 
 const NewItem: FC<Props> = ({ navigation }) => {
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [purchase_location, setPurchaseLocation] = useState('');
   const [info, setInfo] = useState('');
   const [item_type_id, setItemTypeId] = useState(1);
   const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
-  const [expiration_date, setExpirationDate] = useState(
-    Date.now().toLocaleString()
-  );
+  const [expiration_date, setExpirationDate] = useState('');
   const [sku, setSku] = useState('');
   const [manufacturer_id, setManufacturerId] = useState(1);
   const itemsTypes = useItemTypesStore((s) => s.itemsTypes);
@@ -54,49 +53,56 @@ const NewItem: FC<Props> = ({ navigation }) => {
     hideDatePicker();
   };
 
-  const handleAddItem = useCallback(async () => {
-    const token = await AsyncStorage.getItem('@InventoryAppToken');
-    if (!token) {
-      alert('Please Login');
-      navigation.navigate('Main');
-      return;
-    }
-    const { data } = await ax.post<{
-      item: ItemsType;
-      success: boolean;
-    }>(
-      '/items',
-      {
-        name,
-        info,
-        price,
-        expiration_date,
-        purchase_location,
-        sku,
-        manufacturer_id,
-        item_type_id,
-      },
-      {
-        headers: {
-          Authorization: 'Bearer ' + token,
-        },
+  const handleAddItem = async () => {
+    try {
+      setLoading(true);
+      const token = await AsyncStorage.getItem('@InventoryAppToken');
+      if (!token) {
+        alert('Please Login');
+        navigation.navigate('Main');
+        return;
       }
-    );
-
-    if (data.success) {
-      addItem(data.item);
-      setName('');
-      setInfo('');
-      setPrice('');
-      setPurchaseLocation('');
-      setSku('');
-      setManufacturerId(1);
-      setItemTypeId(1);
-      setExpirationDate(Date.now().toLocaleString());
-      navigation.navigate('Main');
+      const { data } = await ax.post<{
+        item: ItemsType;
+        success: boolean;
+      }>(
+        '/items',
+        {
+          name,
+          info,
+          price: parseInt(price),
+          expiration_date,
+          purchase_location,
+          sku,
+          manufacturer_id,
+          item_type_id,
+        },
+        {
+          headers: {
+            Authorization: 'Bearer ' + token,
+          },
+        }
+      );
+      console.log(data);
+      if (data.success) {
+        addItem(data.item);
+        setLoading(false);
+        setName('');
+        setInfo('');
+        setPrice('');
+        setPurchaseLocation('');
+        setSku('');
+        setManufacturerId(1);
+        setItemTypeId(1);
+        setExpirationDate('');
+        navigation.navigate('Main');
+      }
+    } catch (err) {
+      console.error(err.message);
+      alert('Opps! Something Went Wrong while creating the Item');
+      setLoading(false);
     }
-    alert('Opps! Something Went Wrong while creating the Item');
-  }, []);
+  };
 
   const isSubmitBtnDisabled =
     !name ||
@@ -207,6 +213,7 @@ const NewItem: FC<Props> = ({ navigation }) => {
             <Button
               title="Add Item!"
               disabled={isSubmitBtnDisabled}
+              loading={loading}
               raised
               onPress={handleAddItem}
             />
