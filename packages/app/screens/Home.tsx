@@ -8,10 +8,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AntDesign } from '@expo/vector-icons';
 import Main from './tabs/Main';
 import NewItem from './tabs/NewItem';
-import { ax } from '../lib/axios';
-import { useItemStore } from '../lib/items.store';
 import { useManufacturersStore } from '../lib/manufacturers.store';
 import { useItemTypesStore } from '../lib/itemsTypes.store';
+import { useItemStore } from '../lib/items.store';
+import { ax } from '../lib/axios';
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
@@ -32,6 +32,15 @@ const Home: FC<Props> = ({ navigation }) => {
     });
     navigation.replace('Login');
   }, [navigation]);
+
+  useEffect(() => {
+    AsyncStorage.getItem('@InventoryAppToken').then((data) => {
+      if (data == null) {
+        handleLogout();
+      }
+      return;
+    });
+  }, []);
 
   const handleFetchItems = useCallback(async () => {
     const token = await AsyncStorage.getItem('@InventoryAppToken');
@@ -72,7 +81,7 @@ const Home: FC<Props> = ({ navigation }) => {
     const token = await AsyncStorage.getItem('@InventoryAppToken');
     if (!token) return;
     const { data } = await ax.get<{
-      itemsTypes: ItemTypesType[];
+      item_types: ItemTypesType[];
       length: number;
       success: boolean;
     }>('/item_types', {
@@ -81,7 +90,7 @@ const Home: FC<Props> = ({ navigation }) => {
       },
     });
     if (data.success) {
-      setItemsTypes(data.itemsTypes);
+      setItemsTypes(data.item_types);
     }
   }, [setItemsTypes]);
 
@@ -89,12 +98,6 @@ const Home: FC<Props> = ({ navigation }) => {
     handleFetchItems();
     handleFetchManufacturers();
     handleFetchItemsTypes();
-    AsyncStorage.getItem('@InventoryAppToken').then((data) => {
-      if (data == null) {
-        handleLogout();
-      }
-      return;
-    });
   }, []);
 
   useLayoutEffect(() => {
