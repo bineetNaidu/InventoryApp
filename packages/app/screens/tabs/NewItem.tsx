@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { FC, useState, useCallback } from 'react';
 import {
   SafeAreaView,
@@ -7,8 +8,13 @@ import {
   ScrollView,
 } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { Text, Input, Button, Switch } from 'react-native-elements';
+import { Text, Input, Button } from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
+import { useItemTypesStore } from '../../lib/itemsTypes.store';
+import { useManufacturersStore } from '../../lib/manufacturers.store';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import { ax } from '../../lib/axios';
+import { useItemStore } from '../../lib/items.store';
 
 type NewItemTabNavigationProp = StackNavigationProp<
   RootTabParamList,
@@ -22,15 +28,83 @@ type Props = {
 const NewItem: FC<Props> = ({ navigation }) => {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
-  const [has_warranty, setHasWarranty] = useState(false);
   const [purchase_location, setPurchaseLocation] = useState('');
   const [info, setInfo] = useState('');
-  const [item_type, setItemType] = useState('inventory');
-  const [manufacturer, setManufacturer] = useState('');
+  const [item_type_id, setItemTypeId] = useState(1);
+  const [isDatePickerVisible, setIsDatePickerVisible] = useState(false);
+  const [expiration_date, setExpirationDate] = useState(
+    Date.now().toLocaleString()
+  );
+  const [sku, setSku] = useState('');
+  const [manufacturer_id, setManufacturerId] = useState(1);
+  const itemsTypes = useItemTypesStore((s) => s.itemsTypes);
+  const manufacturers = useManufacturersStore((s) => s.manufacturers);
+  const addItem = useItemStore((s) => s.addItem);
+
+  const showDatePicker = () => {
+    setIsDatePickerVisible(true);
+  };
+
+  const hideDatePicker = () => {
+    setIsDatePickerVisible(false);
+  };
+
+  const handleConfirm = (date: Date) => {
+    setExpirationDate(date.toUTCString());
+    hideDatePicker();
+  };
 
   const handleAddItem = useCallback(async () => {
-    navigation.navigate('Main');
+    const token = await AsyncStorage.getItem('@InventoryAppToken');
+    if (!token) {
+      alert('Please Login');
+      navigation.navigate('Main');
+      return;
+    }
+    const { data } = await ax.post<{
+      item: ItemsType;
+      success: boolean;
+    }>(
+      '/items',
+      {
+        name,
+        info,
+        price,
+        expiration_date,
+        purchase_location,
+        sku,
+        manufacturer_id,
+        item_type_id,
+      },
+      {
+        headers: {
+          Authorization: 'Bearer ' + token,
+        },
+      }
+    );
+
+    if (data.success) {
+      addItem(data.item);
+      setName('');
+      setInfo('');
+      setPrice('');
+      setPurchaseLocation('');
+      setSku('');
+      setManufacturerId(1);
+      setItemTypeId(1);
+      setExpirationDate(Date.now().toLocaleString());
+      navigation.navigate('Main');
+    }
+    alert('Opps! Something Went Wrong while creating the Item');
   }, []);
+
+  const isSubmitBtnDisabled =
+    !name ||
+    !info ||
+    !price ||
+    !expiration_date ||
+    !manufacturer_id ||
+    !item_type_id;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -73,7 +147,7 @@ const NewItem: FC<Props> = ({ navigation }) => {
               Choose Item Type
             </Text>
             <RNPickerSelect
-              value={item_type}
+              value={item_type_id}
               style={{
                 placeholder: {
                   color: '#bcbec1',
@@ -84,36 +158,58 @@ const NewItem: FC<Props> = ({ navigation }) => {
                 inputWeb: { color: '#fff', fontWeight: 'bold' },
               }}
               useNativeAndroidPickerStyle
-              onValueChange={(item_type) => setItemType(item_type)}
-              items={[
-                { label: 'Inventory', value: 'inventory' },
-                { label: 'NonInventory', value: 'non-inventory' },
-                { label: 'Service', value: 'service' },
-              ]}
+              onValueChange={(item_type) => setItemTypeId(item_type)}
+              items={itemsTypes.map((it) => ({
+                label: it.name,
+                value: it.id,
+              }))}
             />
           </View>
 
-          <Input
-            style={styles.input}
-            labelStyle={styles.label}
-            label="manufacturer"
-            value={manufacturer}
-            onChangeText={(manufacturer) => setManufacturer(manufacturer)}
-            onSubmitEditing={handleAddItem}
+          <View style={{ marginBottom: 20 }}>
+            <Text style={{ ...styles.label, marginLeft: 7, marginBottom: 10 }}>
+              Choose Manufacturer
+            </Text>
+            <RNPickerSelect
+              value={manufacturer_id}
+              style={{
+                placeholder: {
+                  color: '#bcbec1',
+                  fontWeight: 'bold',
+                },
+                inputAndroid: { color: '#fff', fontWeight: 'bold' },
+                inputIOS: { color: '#fff', fontWeight: 'bold' },
+                inputWeb: { color: '#fff', fontWeight: 'bold' },
+              }}
+              useNativeAndroidPickerStyle
+              onValueChange={(manufacturer_id) =>
+                setManufacturerId(manufacturer_id)
+              }
+              items={manufacturers.map((m) => ({
+                label: m.name,
+                value: m.id,
+              }))}
+            />
+          </View>
+
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
           />
 
           <View style={styles.footer}>
-            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-              <Text style={{ color: '#fff', marginRight: 5 }}>
-                Has Warranty?
-              </Text>
-              <Switch
-                value={has_warranty}
-                onValueChange={(has_warranty) => setHasWarranty(has_warranty)}
-              />
-            </View>
-
-            <Button title="Add Item!" raised onPress={handleAddItem} />
+            <Button
+              title="Select The Expiration Date"
+              onPress={showDatePicker}
+            />
+            <Button
+              title="Add Item!"
+              disabled={isSubmitBtnDisabled}
+              raised
+              onPress={handleAddItem}
+            />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

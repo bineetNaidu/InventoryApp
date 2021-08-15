@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "~1.15.0",
+    "@react-native-community/datetimepicker": "3.5.2",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/bottom-tabs": "^5.11.11",
     "@react-navigation/native": "^5.9.4",
@@ -21,6 +22,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "~1.10.2",
+    "react-native-modal-datetime-picker": "^10.2.0",
     "react-native-picker-select": "^8.0.4",
     "react-native-reanimated": "~2.2.0",
     "react-native-safe-area-context": "3.2.0",
