@@ -36,10 +36,7 @@ export const createItemValidation = [
     .not()
     .isEmpty()
     .withMessage('Should have a expiration_date')
-    .isDate()
-    .withMessage('Should have a expiration_date in the format of YYYY-MM-DD')
-    .trim()
-    .escape(),
+    .trim(),
   body('purchase_location').trim().escape(),
   body('sku').trim().escape(),
   body('manufacturer_id')
